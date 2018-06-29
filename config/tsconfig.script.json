@@ -1,15 +1,11 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "noImplicitAny": true,
+        "typeRoots": ["../typings", "./node_modules/@types"],
+        "strict": true,
         "sourceMap": true,
         "moduleResolution": "node",
-        "isolatedModules": true,
         "target": "es5",
-        "strictNullChecks": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "inlineSources": false,
         "lib": ["es2015"]
     },
     "exclude": [

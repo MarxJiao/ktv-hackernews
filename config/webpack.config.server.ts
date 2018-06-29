@@ -7,7 +7,7 @@ import {Configuration, ExternalsElement} from 'webpack';
 class WebpackConfig implements Configuration {
     target: Configuration['target'] = "node";
     mode: Configuration['mode'] = 'production';
-    entry = [path.resolve(__dirname, '../server/server.ts')];
+    entry = [path.resolve(__dirname, '../src/server/server.ts')];
     output = {
         path: path.resolve(__dirname, '../dist'),
         filename: "server.js"
@@ -25,7 +25,7 @@ class WebpackConfig implements Configuration {
                         loader: 'ts-loader',
                         options: {
                             transpileOnly: true,
-                            configFile: path.resolve(__dirname, './tsconfig.json')
+                            configFile: path.resolve(__dirname, './tsconfig.src.json')
                         }
                     }
                 ],

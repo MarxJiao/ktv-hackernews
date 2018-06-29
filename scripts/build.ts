@@ -1,6 +1,6 @@
 import * as webpack from 'webpack';
 
-import WebpackConfig from '../config/Webpack.config';
+import WebpackConfig from '../config/webpack.config.server';
 
 const buildConfig = new WebpackConfig('production');
 
