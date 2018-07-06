@@ -7,6 +7,6 @@ import getTopStories from './index';
 
 test('topstories', async done => {
     const tops = await getTopStories(10);
-    expect(typeof tops).toBe('object');
+    expect(tops.length).toBe(10);
     done();
 })
