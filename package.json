@@ -1,16 +1,18 @@
 {
-  "name": "webpack-node",
-  "version": "1.0.0",
-  "description": "Use webpack to build node projects",
-  "main": "server/app.ts",
-  "repository": "git@github.com:MarxJiao/webpack-node.git",
+  "name": "ktv-heckernews",
+  "version": "0.0.1",
+  "description": "Hecker News based on Koa, TypeScript and Vue.",
+  "main": "src/server/app.ts",
+  "repository": "git@github.com:MarxJiao/ktv-hackernews.git",
   "author": "MarxJiao <marxjiao@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "rm -rf ./dist && ts-node -P config/tsconfig.script.json ./scripts/start-dev.ts",
-    "build": "rm -rf ./dist && ts-node -P config/tsconfig.script.json ./scripts/build.ts"
+    "build": "rm -rf ./dist && ts-node -P config/tsconfig.script.json ./scripts/build.ts",
+    "test": "jest"
   },
   "dependencies": {
+    "firebase": "^5.2.0",
     "koa": "^2.5.0",
     "koa-router": "^7.4.0",
     "vue": "^2.5.16",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/html-webpack-plugin": "^2.30.3",
+    "@types/jest": "^23.1.4",
     "@types/koa": "^2.0.45",
     "@types/koa-router": "^7.0.30",
     "@types/koa-webpack": "^5.0.1",
@@ -31,11 +34,13 @@
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.3.0",
     "koa-webpack": "^5.0.2",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "postcss-loader": "^2.1.5",
     "start-server-webpack-plugin": "^2.2.5",
+    "ts-jest": "^23.0.0",
     "ts-loader": "^4.2.0",
     "ts-node": "^5.0.1",
     "typescript": "^2.8.1",
@@ -43,5 +48,24 @@
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
     "webpack-node-externals": "^1.7.2"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "config/tsconfig.jest.json"
+      }
+    },
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
