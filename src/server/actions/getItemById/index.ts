@@ -11,7 +11,7 @@ import data from '../../models/data';
  *
  * @param id news id
  */
-export default function (id: number): Promise<Object> {
+export function getItemById (id: number): Promise<Object> {
     return new Promise((resolve, reject) => {
         if (data[id]) {
             resolve(data[id]);

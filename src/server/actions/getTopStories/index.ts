@@ -4,7 +4,7 @@
  */
 
 import api from '../../models/api';
-import getItemById from '../getItemById';
+import {getItemById} from '../getItemById';
 
 /**
  * 返回前 n 条新闻的具体信息
@@ -30,7 +30,7 @@ function gettopstories(ids: number[]): Promise<Object[]> {
  *
  * @param n 需要获取的新闻数量
  */
-function getTopIds (n: number): Promise<number[]> {
+export function getTopIds (n: number): Promise<number[]> {
     return new Promise((resolve, reject) => {
         api.child('topstories').once('value', snapshot => {
             const ids = snapshot.val().filter((id, index) => index < n);

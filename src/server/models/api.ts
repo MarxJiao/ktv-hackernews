@@ -1,5 +1,5 @@
 /**
- * @file heckernews api
+ * @file hackernews api
  * @author Marx
  * @description 从 https://github.com/vuejs/vue-hackernews 修改而来
  */

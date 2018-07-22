@@ -1,7 +1,7 @@
 {
-  "name": "ktv-heckernews",
+  "name": "ktv-hackernews",
   "version": "0.0.1",
-  "description": "Hecker News based on Koa, TypeScript and Vue.",
+  "description": "Hacker News based on Koa, TypeScript and Vue.",
   "main": "src/server/app.ts",
   "repository": "git@github.com:MarxJiao/ktv-hackernews.git",
   "author": "MarxJiao <marxjiao@gmail.com>",
@@ -12,12 +12,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "firebase": "^5.2.0",
     "koa": "^2.5.0",
     "koa-router": "^7.4.0",
     "vue": "^2.5.16",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "webpack": "^4.5.0"
   },
   "devDependencies": {
     "@types/html-webpack-plugin": "^2.30.3",
