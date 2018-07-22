@@ -12,7 +12,7 @@ import {getItemById} from '../getItemById';
  * @param n 需要获取的新闻数量
  */
 export default function topstories(n: number): Promise<Object[]> {
-    return getTopIds(n).then(ids => gettopstories(ids))
+    return getTopIds(n).then(ids => getStories(ids))
 }
 
 /**
@@ -21,7 +21,7 @@ export default function topstories(n: number): Promise<Object[]> {
  * @param ids 新闻 id 的数组
  * @param length 要获取的新闻数量
  */
-function gettopstories(ids: number[]): Promise<Object[]> {
+export function getStories(ids: number[]): Promise<Object[]> {
     return Promise.all(ids.map(id => getItemById(id)));
 }
 

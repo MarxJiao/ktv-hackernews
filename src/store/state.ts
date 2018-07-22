@@ -7,10 +7,12 @@ class newsItem {
 }
 
 export class State {
+    page:number;
     ids: number[];
     newsList: newsItem[];
     constructor() {
-        this.ids = [],
-        this.newsList = []
+        this.ids = [];
+        this.newsList = [];
+        this.page = 0
     }
 }

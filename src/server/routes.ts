@@ -5,7 +5,7 @@
 
 import Router from 'koa-router';
 
-import getTopStorires from './actions/getTopStories';
+import getTopStorires, {getStories} from './actions/getTopStories';
 import {getInitData} from './actions/getInitData';
 
 const router = new Router();
@@ -20,6 +20,11 @@ router.get('/api/gettops', async ctx => {
 
 router.get('/api/getinitdata', async ctx => {
     ctx.body = await getInitData();
+})
+
+router.get('/api/getstories', async ctx => {
+    const ids = ctx.request.query['ids[]'];
+    ctx.body = await getStories(ids)
 })
 
 export default router.routes();
