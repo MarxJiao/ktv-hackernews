@@ -1,5 +1,10 @@
+/**
+ * @file 获取页面初始化数据
+ * @author Marx
+ */
+
 import {chunk} from 'lodash';
-import {getTopIds} from '../getTopStories';
+import {getTopStoryIds} from '../getTopStoryIds';
 import {getItemById} from '../getItemById';
 
 export function getInitData(): Promise<Object> {
@@ -7,17 +12,16 @@ export function getInitData(): Promise<Object> {
         ids: [],
         top20News: []
     };
-    return getTopIds(300).then(ids => {
+    return getTopStoryIds(300).then(ids => {
         initData.ids = chunk(ids, 20);
         return Promise.all(ids.filter((id, index) => index < 20)
             .map(async id => {
                 return await getItemById(id);
             })
-        )
+        );
     })
     .then(news => {
         initData.top20News = news;
-        console.log(initData);
         return initData;
-    })
+    });
 }
