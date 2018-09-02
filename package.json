@@ -44,6 +44,7 @@
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "postcss-loader": "^2.1.5",
+    "serviceworker-webpack-plugin": "^1.0.1",
     "start-server-webpack-plugin": "^2.2.5",
     "ts-jest": "^23.0.0",
     "ts-loader": "^4.2.0",

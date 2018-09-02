@@ -7,6 +7,7 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import {Configuration, ExternalsElement} from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ServiceWorkerWebpackPlugin from 'serviceworker-webpack-plugin';
 import {VueLoaderPlugin} from 'vue-loader';
 
 export default class implements Configuration {
@@ -89,6 +90,9 @@ export default class implements Configuration {
             filename: 'index.html',
             template: 'src/client/index.html',
             inject: true
+        }),
+        new ServiceWorkerWebpackPlugin({
+            entry: './src/client/sw.ts',
         })
     ];
 
