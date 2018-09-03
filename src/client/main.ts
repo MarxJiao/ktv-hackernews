@@ -3,6 +3,7 @@
  * @author Marx
  */
 
+import 'whatwg-fetch';
 import Vue from 'vue';
 import {router} from './routes';
 import {store} from '../store';

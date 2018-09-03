@@ -4,8 +4,10 @@ import { State } from '../state';
 import {UPDATE_IDS, UPDATA_LIST} from '../mutation-types';
 
 export function getInitData ({commit}: ActionContext<State, State>): void {
-    axios.get('/api/getinitdata').then(res => {
-        commit(UPDATE_IDS, res.data.ids);
-        commit(UPDATA_LIST, res.data.top20News);
-    });
+    fetch('/api/getinitdata')
+        .then(res  => res.json())
+        .then(initData => {
+            commit(UPDATE_IDS, initData.ids);
+            commit(UPDATA_LIST, initData.top20News);
+        });
 }

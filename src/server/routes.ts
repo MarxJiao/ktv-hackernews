@@ -17,8 +17,8 @@ router.get('/api/getinitdata', async ctx => {
     ctx.body = await getInitData();
 })
 
-router.get('/api/getstories', async ctx => {
-    const ids = ctx.request.query['ids[]'];
+router.post('/api/getstories', async ctx => {
+    const ids = ctx.request.body.ids;
     ctx.body = await getStoriesByIds(ids)
 })
 
