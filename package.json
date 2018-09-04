@@ -57,6 +57,7 @@
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
     "webpack-node-externals": "^1.7.2",
+    "webpack-pwa-manifest": "^3.7.1",
     "whatwg-fetch": "^2.0.4"
   },
   "jest": {

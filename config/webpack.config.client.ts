@@ -8,6 +8,7 @@ import * as webpack from 'webpack';
 import {Configuration, ExternalsElement} from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ServiceWorkerWebpackPlugin from 'serviceworker-webpack-plugin';
+import WebpackPwaManifest from 'webpack-pwa-manifest';
 import {VueLoaderPlugin} from 'vue-loader';
 
 export default class implements Configuration {
@@ -93,6 +94,18 @@ export default class implements Configuration {
         }),
         new ServiceWorkerWebpackPlugin({
             entry: './src/client/sw.ts',
+        }),
+        new WebpackPwaManifest({
+            name: 'KTV Hacker News',
+            short_name: 'KTVHN',
+            description: 'Hacker News PWA with KTV!',
+            background_color: '#ffffff',
+            icons: [
+                {
+                  src: path.resolve('src/assets/logo.png'),
+                  sizes: [96, 128, 192, 256, 384, 512] // multiple sizes
+                }
+            ]
         })
     ];
 
