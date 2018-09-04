@@ -32,6 +32,7 @@
     "@types/koa-webpack": "^5.0.1",
     "@types/mongoose": "^5.2.1",
     "@types/node": "^7.0.60",
+    "@types/pouchdb": "^6.3.2",
     "@types/webpack": "^4.1.3",
     "@types/webpack-env": "^1.13.6",
     "@types/webpack-node-externals": "^1.6.3",
