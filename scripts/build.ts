@@ -1,18 +1,21 @@
 import * as webpack from 'webpack';
 
-import WebpackConfig from '../config/webpack.config.server';
+import ServerWebpackConfig from '../config/webpack.config.server';
+
 import ClientWebpackConfig from '../config/webpack.config.client';
 
-const buildConfig = new WebpackConfig('production');
+const serverWebpackConfig = new ServerWebpackConfig('production');
 
-webpack(buildConfig).run((err: Error, status) => {
+const serverCompiler = webpack(serverWebpackConfig);
+
+serverCompiler.run((err, status) => {
     console.log(err);
-    console.log(status);
-});
+})
 
-const clientBuildConfig = new ClientWebpackConfig('production');
+const clientWebpackConfig = new ClientWebpackConfig('production');
 
-webpack(clientBuildConfig).run((err: Error, status) => {
+const clientCompiler = webpack(clientWebpackConfig);
+
+clientCompiler.run((err, status) => {
     console.log(err);
-    console.log(status);
 });
