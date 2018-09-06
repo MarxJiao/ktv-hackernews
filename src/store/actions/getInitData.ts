@@ -9,5 +9,7 @@ export function getInitData ({commit}: ActionContext<State, State>): void {
         .then(initData => {
             commit(UPDATE_IDS, initData.ids);
             commit(UPDATA_LIST, initData.top20News);
+        }).catch(err => {
+            console.log(err);
         });
 }

@@ -20,6 +20,8 @@ export function getStories({commit, state}: ActionContext<State, State>, page): 
             console.log(jsonData);
             commit(UPDATA_LIST, jsonData);
             commit(UPDATA_PAGE, page);
+        }).catch(err => {
+            console.log(err);
         });
     }
 }
