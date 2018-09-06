@@ -64,6 +64,9 @@ class WebpackConfig implements Configuration {
             this.plugins.push(...devPlugins);
         }
         else {
+            this.externals.push(
+                nodeExternals()
+            );
             this.entry.push(path.resolve(__dirname, '../src/server/release-server.ts'));
         }
     }
