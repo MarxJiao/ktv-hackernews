@@ -5,7 +5,6 @@
 
 import 'whatwg-fetch';
 import Vue from 'vue';
-import {router} from './routes';
 import {store} from '../store';
 import App from './App.vue';
 
@@ -18,7 +17,6 @@ if ('serviceWorker' in navigator) {
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
-    router,
     store,
     render: h => h(App)
 });
