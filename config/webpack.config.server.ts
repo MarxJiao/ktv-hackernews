@@ -7,7 +7,7 @@ import {Configuration, ExternalsElement} from 'webpack';
 class WebpackConfig implements Configuration {
     target: Configuration['target'] = "node";
     mode: Configuration['mode'] = 'production';
-    entry = [path.resolve(__dirname, '../src/server/server.ts')];
+    entry = [];
     output = {
         path: path.resolve(__dirname, '../dist'),
         filename: "server.js"
@@ -46,6 +46,7 @@ class WebpackConfig implements Configuration {
     constructor(mode: Configuration['mode']) {
         this.mode = mode;
         if (mode === 'development') {
+            this.entry.push(path.resolve(__dirname, '../src/server/dev-server.ts'));
             this.entry.push('webpack/hot/signal');
             this.externals.push(
                 nodeExternals({
@@ -61,6 +62,12 @@ class WebpackConfig implements Configuration {
                 }),
             ]
             this.plugins.push(...devPlugins);
+        }
+        else {
+            this.externals.push(
+                nodeExternals()
+            );
+            this.entry.push(path.resolve(__dirname, '../src/server/release-server.ts'));
         }
     }
 }
