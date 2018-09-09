@@ -5,6 +5,8 @@
 
 import PouchDB from 'pouchdb';
 
+import {getSuccessData, getErrorData} from '../utils/resData';
+
 const NAME = 'hackernews'
 
 var initDb = new PouchDB('ids');
@@ -74,32 +76,35 @@ function handleInitData(path, fetchEvent) {
     if (onLine) {
         const fetchRequest = fetchEvent.request.clone();
         return fetch(fetchRequest).then(res => {
-            res.clone().json().then(data => {
-                const initData = {
-                    _id: 'initData',
-                    ...data
+            res.clone().json().then(initRes => {
+                if (initRes.errno === 0) {
+                    const data = initRes.data;
+                    const initData = {
+                        _id: 'initData',
+                        ...data
+                    }
+                    initDb.get('initData').then(function(doc) {
+                        initDb.put({
+                            _id: 'initData',
+                            _rev: doc._rev,
+                            ...data
+                        });
+                    }).catch(err => {
+                        initDb.put(initData);
+                    })
+                    for (let story of data.top20News) {
+                        cacheStory(story);
+                    }
                 }
                 
-                initDb.get('initData').then(function(doc) {
-                    initDb.put({
-                        _id: 'initData',
-                        _rev: doc._rev,
-                        ...data
-                    });
-                  }).catch(err => {
-                      initDb.put(initData);
-                  })
-                for (let story of data.top20News) {
-                    cacheStory(story);
-                }
             });
             return res;
         })
     }
     else {
         return initDb.get('initData').then(doc => {
-            const res = new Response();
-            return new Response(JSON.stringify(doc), { headers: { 'Content-Type': 'application/json' }});
+            console.log(doc);
+            return new Response(JSON.stringify(getSuccessData(doc)), { headers: { 'Content-Type': 'application/json' }});
         });
     }
 }
@@ -109,47 +114,51 @@ function handleStoriesData(path, fetchEvent) {
     const fetchRequest = fetchEvent.request.clone();
     const resStories = []
     const notCachedStoryIds = []
-    return fetchRequest.json().then(async data => {
-        for (let id of data.ids) {
-            try {
-                const story = await storyDb.get(id + '');
-                resStories.push(story);
+    return fetchRequest.json().then(async storiesRes => {
+        if (storiesRes.errno === 0) {
+            const data = storiesRes.data;
+            for (let id of data.ids) {
+                try {
+                    const story = await storyDb.get(id + '');
+                    resStories.push(story);
+                }
+                catch (err) {
+                    notCachedStoryIds.push(id);
+                }
             }
-            catch (err) {
-                notCachedStoryIds.push(id);
+            if (notCachedStoryIds.length === 0) {
+                return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
             }
-        }
-        if (notCachedStoryIds.length === 0) {
-            return new Response(JSON.stringify(resStories), { headers: { 'Content-Type': 'application/json' }});
-        }
-        if (onLine) {
-            if (resStories.length === 0) {
-                return fetchStories(notCachedStoryIds).then(res => {
-                    res.clone().json().then(data => {
-                        for (let story of data) {
-                            cacheStory(story);
-                        }
+            if (onLine) {
+                if (resStories.length === 0) {
+                    return fetchStories(notCachedStoryIds).then(res => {
+                        res.clone().json().then(data => {
+                            for (let story of data) {
+                                cacheStory(story);
+                            }
+                        });
+                        return res;;
                     });
-                    return res;;
-                });
-            }
-            if (resStories.length > 0 && notCachedStoryIds.length > 0) {
-                return fetchStories(notCachedStoryIds).then(res => {
-                    return res.clone().json().then(data => {
-                        for (let story of data) {
-                            cacheStory(story);
-                        }
-                        return new Response(JSON.stringify(resStories), { headers: { 'Content-Type': 'application/json' }});
+                }
+                if (resStories.length > 0 && notCachedStoryIds.length > 0) {
+                    return fetchStories(notCachedStoryIds).then(res => {
+                        return res.clone().json().then(data => {
+                            for (let story of data) {
+                                cacheStory(story);
+                            }
+                            return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
+                        });
                     });
-                });
-            }
-        }
-        else {
-            if (resStories.length > 0) {
-                return new Response(JSON.stringify(resStories), { headers: { 'Content-Type': 'application/json' }});
+                }
             }
             else {
-                return new Response(JSON.stringify({errno: 404, errmsg: '没有更多数据'}), { headers: { 'Content-Type': 'application/json' }});
+                console.log(resStories);
+                if (resStories.length > 0) {
+                    return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
+                }
+                else {
+                    return new Response(JSON.stringify(getErrorData(40004)), { headers: { 'Content-Type': 'application/json' }});
+                }
             }
         }
     });
