@@ -37,7 +37,6 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-    const fetchRequest = event.request.clone();
     const {referrer, url} = event.request;
     const path = '/' + url.replace(referrer, '');
     if ('/api/getinitdata' === path) {
@@ -114,51 +113,55 @@ function handleStoriesData(path, fetchEvent) {
     const fetchRequest = fetchEvent.request.clone();
     const resStories = []
     const notCachedStoryIds = []
-    return fetchRequest.json().then(async storiesRes => {
-        if (storiesRes.errno === 0) {
-            const data = storiesRes.data;
-            for (let id of data.ids) {
-                try {
-                    const story = await storyDb.get(id + '');
-                    resStories.push(story);
-                }
-                catch (err) {
-                    notCachedStoryIds.push(id);
-                }
+    return fetchRequest.json().then(async storiesReqData => {
+        for (let id of storiesReqData.ids) {
+            try {
+                const story = await storyDb.get(id + '');
+                resStories.push(story);
             }
-            if (notCachedStoryIds.length === 0) {
+            catch (err) {
+                notCachedStoryIds.push(id);
+            }
+        }
+        if (notCachedStoryIds.length === 0) {
+            return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
+        }
+        if (onLine) {
+            if (resStories.length === 0) {
+                return fetchStories(notCachedStoryIds).then(res => {
+                    res.clone().json().then(resJson => {
+                        if (resJson.errno === 0) {
+                            const data = resJson.data;
+                            for (let story of data) {
+                                cacheStory(story);
+                            }
+                        }
+                        
+                    });
+                    return res;;
+                });
+            }
+            if (resStories.length > 0 && notCachedStoryIds.length > 0) {
+                return fetchStories(notCachedStoryIds).then(res => {
+                    return res.clone().json().then(resJson => {
+                        if (resJson.errno === 0) {
+                            const data = resJson.data;
+                            for (let story of data) {
+                                cacheStory(story);
+                            }
+                        }
+                        return new Response(JSON.stringify(getSuccessData([...resStories, ...resJson.data])), { headers: { 'Content-Type': 'application/json' }});
+                    });
+                });
+            }
+        }
+        else {
+            console.log(resStories);
+            if (resStories.length > 0) {
                 return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
             }
-            if (onLine) {
-                if (resStories.length === 0) {
-                    return fetchStories(notCachedStoryIds).then(res => {
-                        res.clone().json().then(data => {
-                            for (let story of data) {
-                                cacheStory(story);
-                            }
-                        });
-                        return res;;
-                    });
-                }
-                if (resStories.length > 0 && notCachedStoryIds.length > 0) {
-                    return fetchStories(notCachedStoryIds).then(res => {
-                        return res.clone().json().then(data => {
-                            for (let story of data) {
-                                cacheStory(story);
-                            }
-                            return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
-                        });
-                    });
-                }
-            }
             else {
-                console.log(resStories);
-                if (resStories.length > 0) {
-                    return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
-                }
-                else {
-                    return new Response(JSON.stringify(getErrorData(40004)), { headers: { 'Content-Type': 'application/json' }});
-                }
+                return new Response(JSON.stringify(getErrorData(40004)), { headers: { 'Content-Type': 'application/json' }});
             }
         }
     });
@@ -176,7 +179,9 @@ function cacheStory(story) {
             ...story
         });
     }).catch(err => {
-        storyDb.put(storyDoc);
+        storyDb.put(storyDoc).catch(err => {
+            console.log('cache errr', err);
+        });
     })
 }
 
