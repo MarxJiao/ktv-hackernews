@@ -8,7 +8,7 @@ export function getStories({commit, state}: ActionContext<State, State>, page): 
         fetch('/api/getstories', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 ids: state.ids[page]
@@ -16,10 +16,13 @@ export function getStories({commit, state}: ActionContext<State, State>, page): 
         }).then(res => {
             return res.json();
             
-        }).then(jsonData => {
-            console.log(jsonData);
-            commit(UPDATA_LIST, jsonData);
-            commit(UPDATA_PAGE, page);
+        }).then(storiesRes => {
+            console.log(storiesRes);
+            if (storiesRes.errno === 0) {
+                const data = storiesRes.data;
+                commit(UPDATA_LIST, data);
+                commit(UPDATA_PAGE, page);
+            }
         }).catch(err => {
             console.log(err);
         });
