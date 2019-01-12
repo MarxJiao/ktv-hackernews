@@ -32,9 +32,6 @@ export default class implements Configuration {
                 test: /\.tsx?$/,
                 use: [
                     {
-                        loader: 'babel-loader',
-                    },
-                    {
                         loader: 'ts-loader',
                         options: {
                             transpileOnly: true,
@@ -44,11 +41,6 @@ export default class implements Configuration {
                         }
                     }
                 ],
-                exclude: /node_modules/
-            },
-            {
-                test: /\.jsx?$/,
-                use: 'babel-loader',
                 exclude: /node_modules/
             },
             {

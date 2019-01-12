@@ -12,6 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@firebase/app-types": "^0.3.2",
     "axios": "^0.18.0",
     "firebase": "^5.2.0",
     "koa": "^2.5.0",
@@ -38,12 +39,9 @@
     "@types/webpack": "^4.1.3",
     "@types/webpack-env": "^1.13.6",
     "@types/webpack-node-externals": "^1.6.3",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "css-loader": "^0.28.11",
+    "css-loader": "^2.1.0",
     "html-webpack-plugin": "^3.2.0",
-    "jest": "^23.3.0",
+    "jest": "^23.6.0",
     "koa-webpack": "^5.0.2",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
