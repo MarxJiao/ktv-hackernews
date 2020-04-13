@@ -24,7 +24,7 @@
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
-    "webpack": "^4.5.0"
+    "webpack": "^4.42.1"
   },
   "devDependencies": {
     "@types/html-webpack-plugin": "^2.30.3",
