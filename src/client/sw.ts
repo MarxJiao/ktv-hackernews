@@ -7,7 +7,16 @@ import PouchDB from 'pouchdb';
 
 import {getSuccessData, getErrorData} from '../utils/resData';
 
-const NAME = 'hackernews'
+interface ExtendableEvent extends Event {
+	waitUntil(fn: Promise<any>): void;
+}
+
+interface FetchEvent extends Event {
+	request: Request;
+	respondWith(response: Promise<Response>|Response): Promise<Response>;
+}
+
+const NAME = 'hackernews-v1'
 
 var initDb = new PouchDB('ids');
 
@@ -24,7 +33,7 @@ const api = [
     '/api/getstories'
 ]
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function(event: ExtendableEvent) {
     event.waitUntil(
         caches.open(NAME)
         .then(function(cache) {
@@ -36,7 +45,21 @@ self.addEventListener('install', function(event) {
     );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('activate', function(event: ExtendableEvent) {
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.map(function(cacheName) {
+                    if (cacheName !== NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+});
+
+self.addEventListener('fetch', function(event: FetchEvent) {
     const {referrer, url} = event.request;
     const path = '/' + url.replace(referrer, '');
     if ('/api/getinitdata' === path) {
@@ -70,7 +93,7 @@ self.addEventListener('fetch', function(event) {
     }
 });
 
-function handleInitData(path, fetchEvent) {
+function handleInitData(path, fetchEvent: FetchEvent) {
     const onLine = navigator.onLine;
     if (onLine) {
         const fetchRequest = fetchEvent.request.clone();
@@ -102,7 +125,6 @@ function handleInitData(path, fetchEvent) {
     }
     else {
         return initDb.get('initData').then(doc => {
-            console.log(doc);
             return new Response(JSON.stringify(getSuccessData(doc)), { headers: { 'Content-Type': 'application/json' }});
         });
     }
@@ -156,7 +178,6 @@ function handleStoriesData(path, fetchEvent) {
             }
         }
         else {
-            console.log(resStories);
             if (resStories.length > 0) {
                 return new Response(JSON.stringify(getSuccessData(resStories)), { headers: { 'Content-Type': 'application/json' }});
             }
