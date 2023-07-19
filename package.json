@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@firebase/app-types": "^0.3.2",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "firebase": "^5.2.0",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.1",
